@@ -1,0 +1,4 @@
+.edit-mode.box[draggable] {
+	user-select: none;
+	cursor: move;
+}

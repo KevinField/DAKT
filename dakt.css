@@ -1,0 +1,112 @@
+body, html {
+	padding: 0;
+	margin: 0;
+	height: 100%;
+}
+.box {
+	box-sizing: border-box;
+	float: left;
+	border: 1px solid black;
+	background-size: 3em;
+	background-repeat: no-repeat;
+	background-position: center 75%;
+}
+body {
+	counter-reset: links notifications;
+	font-family: Verdana;
+}
+a.box:before {
+	display:block;
+	line-height: 0.9em;
+	position:absolute;
+	opacity: 0.08;
+	color: black;
+	z-index: -1;
+}
+a.box {
+	text-align: center;
+	padding-top: 1em;
+	z-index: -2;
+}
+a.box:before {
+	content: counter(links);
+	counter-increment: links;
+}
+a.box:before {
+	font-weight: bold;
+}
+a.box.c2:before { /* these, to be offset from center a bit, depend on the font size, which depends on r... */
+	margin-left: 15vw;
+}
+a.box.c3:before {
+	margin-left: 9vw;
+}
+a.box.r2:before {
+	margin-top: calc(100vh / 10);
+	font-size: calc(100vh / 3);
+}
+a.box.r3:before {
+	margin-top: calc(100vh / 25);
+	font-size: 25vh;
+}
+.full {
+	background-color: lightyellow;
+}
+.full:hover {
+	background-color: white;
+}
+.empty {
+	background-color: lightgrey;
+}
+.c2 {
+	width: 50%;
+}
+.c3 {
+	width: calc(100%/3);
+}
+.r2 {
+	height: calc(50% - 15px);
+}
+.r3 {
+	height: calc(100%/3 - 10px);
+}
+#footer {
+	height: 30px;
+	display: table;
+	clear: left;
+}
+#footer div {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	padding: 0px 5px;
+}
+#footer div:hover {
+	background-color:lightgreen;
+}
+#notifications {
+	width: 100%;
+}
+#notifications:after {
+	content: '(' counter(notifications) ')';
+}
+#notifications.nonzero:after {
+	background-color: yellow;
+}
+.overlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: white;
+	width: 100%;
+	height: calc(100% - 30px);
+	z-index: -3;
+}
+#notifications-overlay > ul > li:before {
+	counter-increment: notifications;
+	content: counter(notifications, none);
+}
+#notifications-overlay > ul:empty:after {
+	content: 'No notifications, currently.';
+}
