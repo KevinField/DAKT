@@ -32,7 +32,3 @@ It's a convenient way to let your users quickly get from an opening page to what
 It's a terrible pun for "anything", with connotations of being fast, like a knee-jerk reaction, but hopefully without the negative connotations of that phrase.  The "Dial" part is because it's by default as keypad-accessible as a traditional touch-tone phone.  (On a smartphone, hopefully, it will be as fast to use as dialing a phone number.)  I know we all love those automated phone menus!  No?  Well, they do have the handy property of getting you to your favourite thing more easily the second time.  That, and DaKT is visual.
 
 Just wait until you hear about the Tera DaKT Till!  I kneaded that.
-
-## Where's the code?
-
-I'm working on it.  This is just the idea write-up for now.
