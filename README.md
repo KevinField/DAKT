@@ -3,7 +3,7 @@ Dial-a-Knee-Thing is a lightning-fast, exploration-based hierarchy viewer, meant
 
 It's meant to help people organize arbitrary hierarchies of URIs, while making them very quick to explore and access.  The URIs can be static or dynamic, but DaKT blazes with static URIs in particular.
 
-Its initial implementation is in the form of an HTML page (with optional JavaScript; perhaps unusually, with JavaScript enabled, DaKT will better preserve your privacy, and also function faster.)  However, DaKT uses a set JSON format that can then be implemented in the form of other (interoperable) clients.  For example, you could implement it as a browser extension, an iOS app, a REBOL app, whatever you prefer.
+Its initial implementation is in the form of an HTML page (with optional JavaScript; perhaps unusually, with JavaScript enabled, DaKT will better preserve your privacy, and also function faster both UI- and network-wise: keyboardability depends on JS, and with JS, we can avoid unnecessary network round-trips / page-reloads.)  However, DaKT uses a set JSON format that can then be implemented in the form of other (interoperable) clients.  For example, you could implement it as a browser extension, an iOS app, a REBOL app, whatever you prefer.
 
 ## How is this different from, say, a bookmarks menu?
 
