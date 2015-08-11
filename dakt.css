@@ -7,7 +7,7 @@ body, html {
 	box-sizing: border-box;
 	float: left;
 	border: 1px solid black;
-	background-size: 3em;
+	background-size: 32px;
 	background-repeat: no-repeat;
 	background-position: center 75%;
 }
@@ -22,18 +22,22 @@ a.box:before {
 	opacity: 0.08;
 	color: black;
 	z-index: 0;
+	content: counter(links);
+	counter-increment: links;
+	font-weight: bold;
 }
 a.box {
 	text-align: center;
 	padding-top: 1em;
 	z-index: -1;
 }
-a.box:before {
-	content: counter(links);
-	counter-increment: links;
-}
-a.box:before {
+a.box > span.menuitem_title {
 	font-weight: bold;
+	display: block;
+}
+a.box > span.menuitem_subtitle {
+	text-decoration: none;
+	color: black;
 }
 a.box.c2:before { /* these, to be offset from center a bit, depend on the font size, which depends on r... */
 	margin-left: 15vw;
@@ -53,7 +57,7 @@ a.box.r3:before {
 	background-color: lightyellow;
 }
 .full:hover {
-	background-color: white;
+	background-color: white !important;
 }
 .empty {
 	background-color: lightgrey;

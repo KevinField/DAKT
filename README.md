@@ -32,3 +32,58 @@ It's a convenient way to let your users quickly get from an opening page to what
 It's a terrible pun for "anything", with connotations of being fast, like a knee-jerk reaction, but hopefully without the negative connotations of that phrase.  The "Dial" part is because it's by default as keypad-accessible as a traditional touch-tone phone.  (On a smartphone, hopefully, it will be as fast to use as dialing a phone number.)  I know we all love those automated phone menus!  No?  Well, they do have the handy property of getting you to your favourite thing more easily the second time.  That, and DaKT is visual.
 
 Just wait until you hear about the Tera DaKT Till!  I kneaded that.
+
+## What's the data format?
+
+Have a look at dakt-menudata-sample.js, but the idea is:
+
+```JavaScript
+var DaKT_menuData = {
+menunumber: [
+['menu item title', { options } ],
+['menu item title', { options } ]
+], menunumber: [
+['menu item title', { options } ],
+...
+['menu item title', { options } ],
+['menu item title', { options } ]
+], ...
+};
+
+```
+
+IOW, DaKT_menuDATA is an object whose members' names are menu numbers, and whose members are arrays of menu items.  Arrays of menu items can contain between 1 and 9 items, inclusive.  Menu items are arrays of either size 1 or size 2; in either case, the first index must contain a string (the menu item's title).  If the second index is present, it must be an object whose members are options.
+
+Side note: Currently, a menu number 1 should probably be included in your data, since it is the default one to be loaded.
+
+Recognized options include:
+
+s
+--
+
+Subtitle.  Display it under the title, in a smaller font.
+
+u
+--
+
+URI that the menu item should link to.  Mutually exclusive of the `m` option below.
+
+m
+--
+
+Menu number that the menu item should link to.  Mutually exclusive of the `u` option above.
+
+b
+--
+
+Background colour of the menu item.
+
+t
+--
+
+Text colour of the menu item (for both the title and subtitle.)
+
+i
+--
+
+Base-64-encoded image data for the menu item's icon.  Specifically, everything you would put after `;base64,` in an inline image data URI.  The image should be 32px square; if it isn't, it will be scaled to that size.
