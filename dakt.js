@@ -80,10 +80,11 @@ var DaKT = (function() {
 	}
 	function menuURI(menuid, opt) {
 		opt = opt || {};
+		var uri = new URI(window.location);
 		if (opt.q) {
-			return 'dakt.html?q=' + opt.q;
+			return uri.filename() + '?q=' + opt.q;
 		}
-		return 'dakt.html?id=' + menuid;
+		return uri.filename() + '?id=' + menuid;
 	}
 	function changeStateId(stateFunction, id, opt) {
 		opt = opt || {};
