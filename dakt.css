@@ -79,18 +79,27 @@ a.box.r3:before {
 	display: table;
 	clear: left;
 }
-#footer div {
+#footer > div {
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
 	white-space: nowrap;
 	padding: 0px 5px;
 }
-#footer div:hover {
+#footer > div:hover {
 	background-color:lightgreen;
 }
-#notifications {
+#footer > #navbar {
 	width: 100%;
+	text-align: left;
+}
+#footer > #navbar > a:nth-of-type(n+2):before {
+	content: ' > ';
+	text-decoration: none;
+	color: black;
+}
+#footer > #navbar > a:hover {
+	background-color:white;
 }
 #notifications:after {
 	content: '(' counter(notifications) ')';

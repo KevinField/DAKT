@@ -59,7 +59,8 @@ if("/"!==a.charAt(0))throw Error("Cannot calculate a URI relative to another rel
 return!0};e.duplicateQueryParameters=function(a){this._parts.duplicateQueryParameters=!!a;return this};e.escapeQuerySpace=function(a){this._parts.escapeQuerySpace=!!a;return this};return d});
 
 var DaKT = (function() {
-	var menuData = window.DaKT_menuData;
+	var menuData = window.DaKT_menuData,
+		menuHistory = [];
 	if (typeof menuData === 'undefined') {
 		window.document.body.innerHTML = '<h1>No data provided</h1><p>DaKT needs some links to display.  Please see <a href="https://github.com/KevinField/DaKT">the README</a>.</p>';
 	} else { // so this part can be cached
@@ -71,7 +72,8 @@ var DaKT = (function() {
 	<p>Similarly you can get this help to go away by pressing zero again, or clicking the Operator button at the bottom.</p>\
 </div>\
 <div id="footer">\
-	<div id="about"><a href="https://github.com/KevinField/DaKT">DaKT</a> Prototype Version 2</div>\
+	<div id="about"><a href="https://github.com/KevinField/DaKT">DaKT</a>3</div>\
+	<div id="navbar"></div>\
 	<div id="operator" onclick="DaKT.toggleOverlay(this.id)">Operator (dial 0)</div>\
 	<div id="search"><form onsubmit="DaKT.searchMenu(event)"><input name="q" type="text" value="" placeholder="press S or click here"/><button type=submit>Search</button></form></div>\
 	<div id="notifications" onclick="DaKT.toggleOverlay(this.id)" class="nonzero">Notifications </div>\
@@ -91,12 +93,15 @@ var DaKT = (function() {
 		if (opt.customMenu) {
 			stateFunction.call(window.history, { id: id, customMenu: opt.customMenu, q: opt.q }, 'search results', menuURI(id, { q: opt.q }));
 		} else {
-			stateFunction.call(window.history, { id: id }, 'menu ' + id, menuURI(id));
+			stateFunction.call(window.history, { id: id, menuHistory: menuHistory }, menuData[id][0], menuURI(id));
 		}
 	}
 	function showMenu (id, opt) {
 		opt = opt || {};
 		var curMenu = opt.customMenu || menuData[id];
+		if (opt.resetHistory) {
+			menuHistory.splice(menuHistory.indexOf(id)); // chop off all history from id forward
+		}
 		if (!curMenu) {
 			if (opt.customMenu) {
 				changeStateId(window.history.pushState, id, { customMenu: opt.customMenu, q: opt.q });
@@ -104,10 +109,10 @@ var DaKT = (function() {
 				changeStateId(window.history.pushState, id);
 			}
 			id = 1;
-			curMenu = menuData[1];
+			curMenu = menuData[0];
 			opt.stateFunction = window.history.replaceState;
 		}
-		var total = curMenu.length;
+		var total = curMenu.length - 1;
 		var gap = 0;
 		// this is hard-coded because the design centres around this idea.
 		if (total > 9) {
@@ -122,54 +127,73 @@ var DaKT = (function() {
 		for (var i=0; i<gap; i++) {
 			curMenu.push([]);
 		}
-		total = curMenu.length;
+		total = curMenu.length - 1;
 		var rows = 2;
 		var cols = 2;
 		var portrait = (window.innerHeight > window.innerWidth);
 		if ((total === 9) || (total === 6 && !portrait)) cols = 3;
 		if ((total === 9) || (total === 6 && portrait)) rows = 3;
-		var newboxes = document.createDocumentFragment();
+		var newBoxes = document.createDocumentFragment();
 		var newclass = 'box r' + rows + ' c' + cols;
-		for (var i=0; i<total; i++) {
-			var newbox = document.createElement('a');
-			var full = curMenu[i].length > 0;
-			newbox.className = newclass + (full?' full':' empty');
+		total = curMenu.length; // over to base 1...
+		for (var i=1; i<total; i++) {
+			var newBox = document.createElement('a');
+			var mi_opt = curMenu[i];
+			var full = (typeof mi_opt.t !== 'undefined') || (typeof mi_opt.m !== 'undefined');
+			newBox.className = newclass + (full?' full':' empty');
 			if (full) {
-				var html = '<span class="menuitem_title">' + curMenu[i][0] + '</span>',
-					mi_opt = {};
-				if (curMenu[i].length > 1) {
-					mi_opt = curMenu[i][1];
-				}
-				var href = mi_opt.u;
+				var html = mi_opt.t,
+					href = mi_opt.u;
 				if (typeof mi_opt.m !== 'undefined') {
-					newbox.setAttribute('onclick', 'DaKT.showMenu(' + mi_opt.m + ', {stateFunction: window.history.pushState}); event.preventDefault();');
-					href = menuURI(mi_opt.m);
+					if (mi_opt.m < menuData.length) {
+						html = menuData[mi_opt.m][0];
+						newBox.setAttribute('onclick', 'DaKT.showMenu(' + mi_opt.m + ', {stateFunction: window.history.pushState}); event.preventDefault();');
+						href = menuURI(mi_opt.m);
+					} else {
+						html = 'broken link to menu ' + mi_opt.m;
+						href = undefined;
+					}
 				}
 				if (typeof mi_opt.i !== 'undefined') {
-					newbox.style.backgroundImage = 'url(data:image/gif;base64,' + mi_opt.i + ')';
+					newBox.style.backgroundImage = 'url(data:image/gif;base64,' + mi_opt.i + ')';
 				}
-				if (typeof mi_opt.t !== 'undefined') {
-					newbox.style.color = mi_opt.t;
+				if (typeof mi_opt.c !== 'undefined') {
+					newBox.style.color = mi_opt.c;
 				}
 				if (typeof mi_opt.b !== 'undefined') {
-					newbox.style.backgroundColor = mi_opt.b;
+					newBox.style.backgroundColor = mi_opt.b;
 				}
-				newbox.setAttribute('menunumber', i+1);
+				newBox.setAttribute('menu-item-number', i);
 				if (typeof href !== 'undefined') {
-					newbox.setAttribute('href', href);
+					newBox.setAttribute('href', href);
 				}
+				html = '<span class="menuitem_title">' + html + '</span>';
 				if (typeof mi_opt.s !== 'undefined') {
 					html += '<span class="menuitem_subtitle">' + mi_opt.s + '</span>';
 				}
-				newbox.innerHTML = html;
+				newBox.innerHTML = html;
 			}
-			newboxes.appendChild(newbox);
+			newBoxes.appendChild(newBox);
 		}
 		var boxes = document.querySelectorAll('.box');
 		for (var i=boxes.length-1; i>=0; i--) {
 			document.body.removeChild(boxes[i]);
 		}
-		document.body.insertBefore(newboxes, document.getElementById('footer'));
+		document.body.insertBefore(newBoxes, document.getElementById('footer'));
+		if (menuHistory.indexOf(id) === -1) {
+			menuHistory.push(id);
+		}
+		var newNavBarContent = document.createDocumentFragment();
+		for (var i=0; i<menuHistory.length; i++) {
+			var newlink = document.createElement('a');
+			newlink.setAttribute('onclick', 'DaKT.showMenu(' + menuHistory[i] + ', {stateFunction: window.history.pushState, resetHistory: true}); event.preventDefault();');
+			newlink.setAttribute('href', menuURI(menuHistory[i]));
+			newlink.innerHTML = menuData[menuHistory[i]][0];
+			newNavBarContent.appendChild(newlink);
+		}
+		var navbar = document.getElementById('navbar');
+		navbar.innerHTML = '';
+		navbar.appendChild(newNavBarContent);
 		if (opt.stateFunction) {
 			if (opt.customMenu) {
 				changeStateId(opt.stateFunction, id, { customMenu: opt.customMenu, q: opt.q });
@@ -179,11 +203,14 @@ var DaKT = (function() {
 		}
 	}
 	function resetMenu() {
-		var id = 1;
+		var id = 0;
+		menuHistory = [];
 		if ('state' in window.history && window.history.state !== null) {
 			id = window.history.state.id;
 			if (window.history.state.customMenu) {
 				return showMenu(id, { customMenu: window.history.state.customMenu, q: window.history.state.q });
+			} else if (typeof window.history.state.menuHistory !== 'undefined') {
+				menuHistory = window.history.state.menuHistory;
 			}
 		} else if (window.location.search !== '') {
 			id = URI.parseQuery(window.location.search).id;
@@ -237,7 +264,7 @@ var DaKT = (function() {
 			document.querySelector("input[name='q']").focus();
 			e.preventDefault(); // don't type the "s"
 		} else if ((''+maybeNumber).match(/^[1-9]$/)) {
-			var maybeA = document.querySelector("a[menunumber='" + maybeNumber + "']");
+			var maybeA = document.querySelector("a[menu-item-number='" + maybeNumber + "']");
 			if (maybeA) {
 				maybeA.click();
 			}
