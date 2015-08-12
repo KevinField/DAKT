@@ -52,7 +52,7 @@ var DaKT_menuData = [
 
 ```
 
-IOW, DaKT_menuDATA is an array of arrays.  The outer array's indices are menu numbers.  The inner arrays consist of a menu title string in the [0] index (used for the navbar and also to title any menu items that link to the given menu), followed by between 1 and 9 (inclusive) menu item objects.  A menu item object must contain either the `m` option or the `t` option.
+IOW, DaKT_menuData is an array of arrays.  The outer array's indices are menu numbers.  The inner arrays consist of a menu title string in the [0] index (used for the navbar and also to title any menu items that link to the given menu), followed by between 1 and 9 (inclusive) menu item objects.  A menu item object must contain either the `m` option or the `t` option.
 
 Recognized options include:
 
