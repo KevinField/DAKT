@@ -112,6 +112,7 @@ var DaKT = (function() {
 			curMenu = menuData[0];
 			opt.stateFunction = window.history.replaceState;
 		}
+		document.title = menuData[id][0];
 		var total = curMenu.length - 1;
 		var gap = 0;
 		// this is hard-coded because the design centres around this idea.
