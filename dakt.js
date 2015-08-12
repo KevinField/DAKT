@@ -71,7 +71,7 @@ var DaKT = (function() {
 	<p>Similarly you can get this help to go away by pressing zero again, or clicking the Operator button at the bottom.</p>\
 </div>\
 <div id="footer">\
-	<div id="about"><a href="https://github.com/KevinField/DaKT">DaKT</a> Prototype Version 1</div>\
+	<div id="about"><a href="https://github.com/KevinField/DaKT">DaKT</a> Prototype Version 2</div>\
 	<div id="operator" onclick="DaKT.toggleOverlay(this.id)">Operator (dial 0)</div>\
 	<div id="search"><form onsubmit="DaKT.searchMenu(event)"><input name="q" type="text" value="" placeholder="press S or click here"/><button type=submit>Search</button></form></div>\
 	<div id="notifications" onclick="DaKT.toggleOverlay(this.id)" class="nonzero">Notifications </div>\
