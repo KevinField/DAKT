@@ -261,7 +261,7 @@ var DaKT = (function() {
 	}
 	function keypressHandler(e) {
 		if (e.target.tagName === 'INPUT' || e.repeat) return;
-		var maybeNumber = e.key || (e.charCode - 48);
+		var maybeNumber = e.charCode - 48;
 		;;;console.log(maybeNumber);
 		if (maybeNumber === 0) {
 			DaKT.toggleOverlay('operator');
