@@ -83,6 +83,7 @@ var DaKT = (function() {
 	<div id="operator" onclick="DaKT.toggleOverlay(this.id)">Operator (dial 0)</div>\
 	<div id="search"><form onsubmit="DaKT.searchMenu(event)"><input name="q" type="text" value="" placeholder="press S or click here"/><button type=submit>Search</button></form></div>\
 	<div id="notifications" onclick="DaKT.toggleOverlay(this.id)" class="nonzero">Notifications </div>\
+	<div id="save"><a href="" download="dakt-menudata-sample.js">Save</a></div>\
 </div>\
 		';
 	}

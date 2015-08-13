@@ -1,6 +1,5 @@
 "use strict";
-var DaKT_editor = 'dakt-local-sample-editor.html',
-DaKT_menuData = [
+var DaKT_addableData = [
 ['Home',
 { t: '2x2 test', s: 'you\'re looking at it', b: 'lightgreen' },
 { m: 1, i: 'R0lGODlhFQAUALMAAAQCBIQC/ISGhAB8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAEALAAAAAAVABQAAwQkMMhJq7046827z0AYflIokIEwoiaqAmjQkm88e6IY73zv/50IADs=', b: 'lightgreen' },
