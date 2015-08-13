@@ -23,6 +23,10 @@ DaKT gives you that "easy navigation of your stuff" interface, while being exten
 
 Eventually, DaKT can be extended to allow you to publish your own set of bookmarks, for others to subscribe to, simply by adding your published DaKT URL to their own DaKT hierarchy.
 
+## How can I try out the current prototype?
+
+Download and unzip the source, then launch the file dakt-local-sample.html.
+
 ## How is this for web and intranet sites, small and large?
 
 It's a convenient way to let your users quickly get from an opening page to what they are looking for.  The use of static hierarchies *should* make it easier for managers of very large sites, in particular, to avoid the frustratingly common case of nav bars with differing versions on different pages sending their users in circles.  Meanwhile, because it's so fast, the exploration of a large site's content is in itself less frustrating, especially on a slow computer and/or slow connection.  Plus, it saves a tonne of server resources in the process.
@@ -56,37 +60,30 @@ IOW, DaKT_menuData is an array of arrays.  The outer array's indices are menu nu
 
 Recognized options include:
 
-u
---
+### u
 
 URI that the menu item should link to.  Mutually exclusive of the `m` option below.
 
-t
---
+### t
 
 Title of the menu item.  Mutually exclusive of the `m` option below.
 
-m
---
+### m
 
 Menu number that the menu item should link to.  Mutually exclusive to both of the `u` and `t` options above.
 
-s
---
+### s
 
 Subtitle.  Display it under the title, in a smaller font.
 
-b
---
+### b
 
 Background colour of the menu item.
 
-c
---
+### c
 
 Text colour of the menu item (for both the title and subtitle.)
 
-i
---
+### i
 
 Base-64-encoded image data for the menu item's icon.  Specifically, everything you would put after `;base64,` in an inline image data URI.  The image should be 32px square; if it isn't, it will be scaled to that size.
