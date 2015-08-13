@@ -5,6 +5,8 @@ It's meant to help people organize arbitrary hierarchies of URIs, while making t
 
 Its initial implementation is in the form of an HTML page (with optional JavaScript; perhaps unusually, with JavaScript enabled, DaKT will better preserve your privacy, and also function faster both UI- and network-wise: keyboardability depends on JS, and with JS, we can avoid unnecessary network round-trips / page-reloads.)  However, DaKT uses a set JSON format that can then be implemented in the form of other (interoperable) clients.  For example, you could implement it as a browser extension, an iOS app, a REBOL app, whatever you prefer.
 
+It's been tested on an old, low-spec netbook, not a swanky, cutting-edge developer workstation, so it should remain quite responsive (even more so than today's standard for responsive web UIs) even on old hardware.
+
 ## How is this different from, say, a bookmarks menu?
 
 A bookmarks menu is adequate when its hierarchy is small enough, Fitz' law notwithstanding.  However, when the root menu has 300 folders, it's a bit like throwing your paperwork down the stairs.  DaKT forces some measure of organization, fighting back against one of the difficulties of the technological age: Too Many Choices.  It does this by limiting your hierarchy breadth (the number of options at each stage) to 9.
@@ -23,13 +25,13 @@ DaKT gives you that "easy navigation of your stuff" interface, while being exten
 
 Eventually, DaKT can be extended to allow you to publish your own set of bookmarks, for others to subscribe to, simply by adding your published DaKT URL to their own DaKT hierarchy.
 
-## How can I try out the current prototype?
-
-Download and unzip the source, then launch the file dakt-local-sample.html.
-
 ## How is this for web and intranet sites, small and large?
 
 It's a convenient way to let your users quickly get from an opening page to what they are looking for.  The use of static hierarchies *should* make it easier for managers of very large sites, in particular, to avoid the frustratingly common case of nav bars with differing versions on different pages sending their users in circles.  Meanwhile, because it's so fast, the exploration of a large site's content is in itself less frustrating, especially on a slow computer and/or slow connection.  Plus, it saves a tonne of server resources in the process.
+
+## How can I try out the current prototype?
+
+Download and unzip the source, then launch the file dakt-local-sample.html.
 
 ## What is "a Knee-Thing", and why would I want to Dial one?
 
