@@ -86,13 +86,13 @@ var DaKT = (function() {
 </div>\
 		';
 	}
-	function menuURI(menuid, opt) {
+	function menuURI(menuID, opt) {
 		opt = opt || {};
 		var uri = new URI(window.location);
 		if (opt.q) {
 			return uri.filename() + '?q=' + opt.q;
 		}
-		return uri.filename() + '?id=' + menuid;
+		return uri.filename() + '?id=' + menuID;
 	}
 	function changeStateId(stateFunction, id, opt) {
 		opt = opt || {};
@@ -118,7 +118,7 @@ var DaKT = (function() {
 			curMenu = menuData[0];
 			opt.stateFunction = window.history.replaceState;
 		}
-		document.title = menuData[id][0];
+		document.title = curMenu[0];
 		var total = curMenu.length - 1;
 		var gap = 0;
 		// this is hard-coded because the design centres around this idea.
@@ -187,20 +187,24 @@ var DaKT = (function() {
 			document.body.removeChild(boxes[i]);
 		}
 		document.body.insertBefore(newBoxes, document.getElementById('footer'));
-		if (menuHistory.indexOf(id) === -1) {
-			menuHistory.push(id);
-		}
-		var newNavBarContent = document.createDocumentFragment();
-		for (var i=0; i<menuHistory.length; i++) {
-			var newlink = document.createElement('a');
-			newlink.setAttribute('onclick', 'DaKT.showMenu(' + menuHistory[i] + ', {stateFunction: window.history.pushState, resetHistory: true}); event.preventDefault();');
-			newlink.setAttribute('href', menuURI(menuHistory[i]));
-			newlink.innerHTML = menuData[menuHistory[i]][0];
-			newNavBarContent.appendChild(newlink);
-		}
 		var navbar = document.getElementById('navbar');
-		navbar.innerHTML = '';
-		navbar.appendChild(newNavBarContent);
+		if (menuHistory.indexOf(id) === -1) {
+			if (id === -1) {
+				navbar.innerHTML = "Search results";
+			} else {
+				menuHistory.push(id);
+				var newNavBarContent = document.createDocumentFragment();
+				for (var i=0; i<menuHistory.length; i++) {
+					var newlink = document.createElement('a');
+					newlink.setAttribute('onclick', 'DaKT.showMenu(' + menuHistory[i] + ', {stateFunction: window.history.pushState, resetHistory: true}); event.preventDefault();');
+					newlink.setAttribute('href', menuURI(menuHistory[i]));
+					newlink.innerHTML = menuData[menuHistory[i]][0];
+					newNavBarContent.appendChild(newlink);
+				}
+				navbar.innerHTML = '';
+				navbar.appendChild(newNavBarContent);
+			}
+		}
 		if (opt.stateFunction) {
 			if (opt.customMenu) {
 				changeStateId(opt.stateFunction, id, { customMenu: opt.customMenu, q: opt.q });
@@ -231,22 +235,26 @@ var DaKT = (function() {
 		var q = input.value;
 		var results = [];
 		var serialResults = [];
-		for (var menuid in menuData) {
-			var curMenu = menuData[menuid];
-			menuLoop: for (var i=0,size=curMenu.length; i<size; i++) {
-				if (curMenu[i].length === 0) {
+		menuLoop: for (var menuID=0,numMenus=menuData.length; menuID<numMenus; menuID++) {
+			var curMenu = menuData[menuID];
+			menuItemLoop: for (var i=1,size=curMenu.length; i<size; i++) {
+				var mi_opt = curMenu[i];
+				var full = (typeof mi_opt.t !== 'undefined') || (typeof mi_opt.m !== 'undefined');
+				if (!full) {
+					;;;console.log("Skipping ", curMenu[i]);
 					continue;
 				}
-				if ((curMenu[i][0].indexOf(q) !== -1) ||
-					((typeof curMenu[i][1] === 'string') && (curMenu[i][1].indexOf(q) !== -1))) {
+				if (((typeof mi_opt.t !== 'undefined') && (mi_opt.t.indexOf(q) !== -1)) ||
+					((typeof mi_opt.s !== 'undefined') && (mi_opt.s.indexOf(q) !== -1)) ||
+					((typeof mi_opt.m !== 'undefined') && (mi_opt.m < menuData.length) && (menuData[mi_opt.m][0].indexOf(q) !== -1))) {
 					if (results.length === 9) { // we could also paginate, up to some maximum
-						results[8] = ['Sorry, there were more than 9 results for "' + q + '."  Try narrowing it down.', 1, 'R0lGODlhFQAUALMAAAQCBASGBASGhMTGxAQChPz+/AQC/ISGhNTWzIQC/BMTAAAAAAAGAAMAAFEAAAAAACH5BAEAAAkALAAAAAAVABQAAwRrMMlJq704y8O7ppwwIEgAfMlRDEUZvGfGGathG+8hGyNCvDjTzvUiCH6xy8FGBBqSluXt9RI8ZYQp1UDQZQA3gBhAGEMrZACLBVitzhS1eT6AS9qAQzKPx8jnY3VfawVta3ZxYwlmKI2OGBEAOw=='];
-						return showMenu(0, { stateFunction: window.history.pushState, customMenu: results, q: q });
+						results[8] = { t: 'Sorry, there were more than 9 results for "' + q + '."', s: 'Try narrowing it down.', c: 'red', i: 'R0lGODlhFQAUALMAAAQCBASGBASGhMTGxAQChPz+/AQC/ISGhNTWzIQC/BMTAAAAAAAGAAMAAFEAAAAAACH5BAEAAAkALAAAAAAVABQAAwRrMMlJq704y8O7ppwwIEgAfMlRDEUZvGfGGathG+8hGyNCvDjTzvUiCH6xy8FGBBqSluXt9RI8ZYQp1UDQZQA3gBhAGEMrZACLBVitzhS1eT6AS9qAQzKPx8jnY3VfawVta3ZxYwlmKI2OGBEAOw==' };
+						break menuLoop;
 					}
 					var serial = JSON.stringify(curMenu[i]);
 					resultsLoop: for (var j=0,r=results.length; j<r; j++) {
 						if (serial === serialResults[j]) {
-							continue menuLoop; // duplicates do not make sense here, skip them
+							continue menuItemLoop; // duplicates do not make sense here, skip them
 						}
 					}
 					results.push(curMenu[i]);
@@ -255,9 +263,10 @@ var DaKT = (function() {
 			}
 		}
 		if (results.length === 0) { // we could also have a stemmed version or some other fuzzier server-side search offered at this point
-			results.push(['Sorry, there were no results for "' + q + '."  Try variations.', 1, 'R0lGODlhFQAUALMAAAQCBASGBASGhMTGxAQChPz+/AQC/ISGhNTWzIQC/BMTAAAAAAAGAAMAAFEAAAAAACH5BAEAAAkALAAAAAAVABQAAwRrMMlJq704y8O7ppwwIEgAfMlRDEUZvGfGGathG+8hGyNCvDjTzvUiCH6xy8FGBBqSluXt9RI8ZYQp1UDQZQA3gBhAGEMrZACLBVitzhS1eT6AS9qAQzKPx8jnY3VfawVta3ZxYwlmKI2OGBEAOw==']);
+			results.push( { t: 'Sorry, there were no results for "' + q + '."', s: 'Try variations.', c: 'red', i: 'R0lGODlhFQAUALMAAAQCBASGBASGhMTGxAQChPz+/AQC/ISGhNTWzIQC/BMTAAAAAAAGAAMAAFEAAAAAACH5BAEAAAkALAAAAAAVABQAAwRrMMlJq704y8O7ppwwIEgAfMlRDEUZvGfGGathG+8hGyNCvDjTzvUiCH6xy8FGBBqSluXt9RI8ZYQp1UDQZQA3gBhAGEMrZACLBVitzhS1eT6AS9qAQzKPx8jnY3VfawVta3ZxYwlmKI2OGBEAOw==' } );
 		}
-		showMenu(0, { stateFunction: window.history.pushState, customMenu: results, q: q });
+		results.unshift('Search results');
+		showMenu(-1, { stateFunction: window.history.pushState, customMenu: results, q: q });
 	}
 	function keypressHandler(e) {
 		if (e.target.tagName === 'INPUT' || e.repeat) return;
