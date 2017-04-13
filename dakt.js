@@ -73,16 +73,15 @@ var DaKT = (function() {
 <div id="operator-overlay" class="overlay">\
 	<h1>Help with DaKT</h1>\
 	<p>DaKT lets you dial your way through a serious of menus, so that common sequences can be quickly accessed by a succession of number keypresses.</p>\
-	<p>An overlay similar to the one you are reading, but showing whatever notifications DaKT is configured to show, can be toggled by clicking the Notifications bar at the bottom of the screen, or by pressing "N".</p>\
-	<p>Similarly you can get this help to go away by pressing zero again, or clicking the Operator button at the bottom.</p>\
+	<p>You can get this help to go away by pressing zero again, or clicking the Operator button at the bottom.</p>\
 	' + DaKT_editor + '\
 </div>\
 <div id="footer">\
 	<div id="about"><a href="https://github.com/KevinField/DaKT">DaKT</a>3</div>\
 	<div id="navbar"></div>\
-	<div id="operator" onclick="DaKT.toggleOverlay(this.id)">Operator (dial 0)</div>\
+	<div id="operator" onclick="DaKT.toggleOverlay(this.id)"><span id="keyboard">Operator (dial 0)</span></div>\
 	<div id="search"><form onsubmit="DaKT.searchMenu(event)"><input name="q" type="text" value="" placeholder="press S or click here"/><button type=submit>Search</button></form></div>\
-	<div id="notifications" onclick="DaKT.toggleOverlay(this.id)" class="nonzero">Notifications </div>\
+	<div id="notifications"></div>\
 </div>\
 		';
 	}
@@ -144,9 +143,9 @@ var DaKT = (function() {
 		var newclass = 'box r' + rows + ' c' + cols;
 		total = curMenu.length; // over to base 1...
 		for (var i=1; i<total; i++) {
-			var newBox = document.createElement('a');
 			var mi_opt = curMenu[i];
 			var full = (typeof mi_opt.t !== 'undefined') || (typeof mi_opt.m !== 'undefined');
+			var newBox = document.createElement(full?'a':'span');
 			newBox.className = newclass + (full?' full':' empty');
 			if (full) {
 				var html = mi_opt.t,
@@ -161,9 +160,6 @@ var DaKT = (function() {
 						href = undefined;
 					}
 				}
-				if (typeof mi_opt.i !== 'undefined') {
-					newBox.style.backgroundImage = 'url(data:image/gif;base64,' + mi_opt.i + ')';
-				}
 				if (typeof mi_opt.c !== 'undefined') {
 					newBox.style.color = mi_opt.c;
 				}
@@ -177,6 +173,15 @@ var DaKT = (function() {
 				html = '<span class="menuitem_title">' + html + '</span>';
 				if (typeof mi_opt.s !== 'undefined') {
 					html += '<span class="menuitem_subtitle">' + mi_opt.s + '</span>';
+				}
+				if (typeof mi_opt.i !== 'undefined') {
+					var ext = 'jpg';
+					if (mi_opt.i.charAt(0) === 'R')
+						ext = 'gif';
+					else if (mi_opt.i.charAt(0) === 'i')
+						ext = 'png';
+					var dataURL = 'data:image/' + ext + ';base64,' + mi_opt.i;
+					html += '<span class="menuitem_icon"><img src="' + dataURL + '" /></span>';
 				}
 				newBox.innerHTML = html;
 			}
@@ -237,6 +242,7 @@ var DaKT = (function() {
 		var serialResults = [];
 		menuLoop: for (var menuID=0,numMenus=menuData.length; menuID<numMenus; menuID++) {
 			var curMenu = menuData[menuID];
+			var qLower = q.toLowerCase();
 			menuItemLoop: for (var i=1,size=curMenu.length; i<size; i++) {
 				var mi_opt = curMenu[i];
 				var full = (typeof mi_opt.t !== 'undefined') || (typeof mi_opt.m !== 'undefined');
@@ -244,9 +250,9 @@ var DaKT = (function() {
 					;;;console.log("Skipping ", curMenu[i]);
 					continue;
 				}
-				if (((typeof mi_opt.t !== 'undefined') && (mi_opt.t.indexOf(q) !== -1)) ||
-					((typeof mi_opt.s !== 'undefined') && (mi_opt.s.indexOf(q) !== -1)) ||
-					((typeof mi_opt.m !== 'undefined') && (mi_opt.m < menuData.length) && (menuData[mi_opt.m][0].indexOf(q) !== -1))) {
+				if (((typeof mi_opt.t !== 'undefined') && (mi_opt.t.toLowerCase().indexOf(qLower) !== -1)) ||
+					((typeof mi_opt.s !== 'undefined') && (mi_opt.s.toLowerCase().indexOf(qLower) !== -1)) ||
+					((typeof mi_opt.m !== 'undefined') && (mi_opt.m < menuData.length) && (menuData[mi_opt.m][0].toLowerCase().indexOf(qLower) !== -1))) {
 					if (results.length === 9) { // we could also paginate, up to some maximum
 						results[8] = { t: 'Sorry, there were more than 9 results for "' + q + '."', s: 'Try narrowing it down.', c: 'red', i: 'R0lGODlhFQAUALMAAAQCBASGBASGhMTGxAQChPz+/AQC/ISGhNTWzIQC/BMTAAAAAAAGAAMAAFEAAAAAACH5BAEAAAkALAAAAAAVABQAAwRrMMlJq704y8O7ppwwIEgAfMlRDEUZvGfGGathG+8hGyNCvDjTzvUiCH6xy8FGBBqSluXt9RI8ZYQp1UDQZQA3gBhAGEMrZACLBVitzhS1eT6AS9qAQzKPx8jnY3VfawVta3ZxYwlmKI2OGBEAOw==' };
 						break menuLoop;
@@ -274,16 +280,9 @@ var DaKT = (function() {
 		;;;console.log(maybeNumber);
 		if (maybeNumber === 0) {
 			DaKT.toggleOverlay('operator');
-		} else if (maybeNumber === 62 || maybeNumber === 30) { // n or N
-			DaKT.toggleOverlay('notifications');
 		} else if (maybeNumber === 67 || maybeNumber === 35) { // s or S
 			document.querySelector("input[name='q']").focus();
 			e.preventDefault(); // don't type the "s"
-		} else if (maybeNumber === 53 || maybeNumber === 21) { // e or E
-			var editorLink = document.getElementById('editor-link');
-			if (typeof editorLink !== 'undefined') {
-				editorLink.click();
-			}
 		} else if ((''+maybeNumber).match(/^[1-9]$/)) {
 			var maybeA = document.querySelector("a[menu-item-number='" + maybeNumber + "']");
 			if (maybeA) {
