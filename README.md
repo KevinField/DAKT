@@ -86,4 +86,4 @@ Text colour of the menu item (for both the title and subtitle.)
 
 ### i
 
-Base-64-encoded image data for the menu item's icon.  Specifically, everything you would put after `;base64,` in an inline image data URI.  The image should be 32px square; if it isn't, it will be scaled to that size.
+Base-64-encoded image data for the menu item's icon.  Specifically, everything you would put after `;base64,` in an inline image data URI.  The image should be 64px square; if it isn't, it will be scaled to that size.

@@ -73,15 +73,16 @@ var DaKT = (function() {
 <div id="operator-overlay" class="overlay">\
 	<h1>Help with DaKT</h1>\
 	<p>DaKT lets you dial your way through a serious of menus, so that common sequences can be quickly accessed by a succession of number keypresses.</p>\
-	<p>You can get this help to go away by pressing zero again, or clicking the Operator button at the bottom.</p>\
+	<p>An overlay similar to the one you are reading, but showing whatever notifications DaKT is configured to show, can be toggled by clicking the Notifications bar at the bottom of the screen, or by pressing "N".</p>\
+	<p>Similarly you can get this help to go away by pressing zero again, or clicking the Operator button at the bottom.</p>\
 	' + DaKT_editor + '\
 </div>\
 <div id="footer">\
 	<div id="about"><a href="https://github.com/KevinField/DaKT">DaKT</a>3</div>\
 	<div id="navbar"></div>\
-	<div id="operator" onclick="DaKT.toggleOverlay(this.id)"><span id="keyboard">Operator (dial 0)</span></div>\
+	<div id="operator" onclick="DaKT.toggleOverlay(this.id)">Operator (dial 0)</div>\
 	<div id="search"><form onsubmit="DaKT.searchMenu(event)"><input name="q" type="text" value="" placeholder="press S or click here"/><button type=submit>Search</button></form></div>\
-	<div id="notifications"></div>\
+	<div id="notifications" onclick="DaKT.toggleOverlay(this.id)" class="nonzero">Notifications </div>\
 </div>\
 		';
 	}
@@ -280,10 +281,17 @@ var DaKT = (function() {
 		;;;console.log(maybeNumber);
 		if (maybeNumber === 0) {
 			DaKT.toggleOverlay('operator');
+		} else if (maybeNumber === 62 || maybeNumber === 30) { // n or N
+			DaKT.toggleOverlay('notifications');
 		} else if (maybeNumber === 67 || maybeNumber === 35) { // s or S
 			document.querySelector("input[name='q']").focus();
 			e.preventDefault(); // don't type the "s"
-		} else if ((''+maybeNumber).match(/^[1-9]$/)) {
+		} else if (maybeNumber === 53 || maybeNumber === 21) { // e or E
+			var editorLink = document.getElementById('editor-link');
+			if (typeof editorLink !== 'undefined') {
+				editorLink.click();
+			}
+				} else if ((''+maybeNumber).match(/^[1-9]$/)) {
 			var maybeA = document.querySelector("a[menu-item-number='" + maybeNumber + "']");
 			if (maybeA) {
 				maybeA.click();
