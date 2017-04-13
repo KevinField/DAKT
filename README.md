@@ -1,3 +1,5 @@
+# [Live Demo](http://codingthat.github.io/DaKT/)
+
 # DaKT
 Dial-a-Knee-Thing is a lightning-fast, exploration-based hierarchy viewer, meant to scale from personal bookmarks all the way up to a replacement for large corporate web sites' nav pages / site maps; it also refers to the ideas behind the viewer, and the format in which it stores its data.
 
@@ -28,10 +30,6 @@ Eventually, DaKT can be extended to allow you to publish your own set of bookmar
 ## How is this for web and intranet sites, small and large?
 
 It's a convenient way to let your users quickly get from an opening page to what they are looking for.  The use of static hierarchies *should* make it easier for managers of very large sites, in particular, to avoid the frustratingly common case of nav bars with differing versions on different pages sending their users in circles.  Meanwhile, because it's so fast, the exploration of a large site's content is in itself less frustrating, especially on a slow computer and/or slow connection.  Plus, it saves a tonne of server resources in the process.
-
-## How can I try out the current prototype?
-
-Download and unzip the source, then launch the file dakt-local-sample.html.
 
 ## What is "a Knee-Thing", and why would I want to Dial one?
 
