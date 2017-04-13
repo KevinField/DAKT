@@ -3,14 +3,18 @@ body, html {
 	margin: 0;
 	height: 100%;
 }
+@-ms-viewport{
+	width: device-width;
+}
 .box {
 	box-sizing: border-box;
 	float: left;
 	border: 1px solid black;
-	background-size: 32px;
+	background-size: 64px;
 	background-repeat: no-repeat;
 	background-position: center 75%;
 }
+@media(max-width:6in){.box{background-size:15vw;}} 
 body {
 	counter-reset: links notifications;
 	font-family: Verdana;
@@ -31,13 +35,21 @@ a.box {
 	padding-top: 1em;
 	z-index: -1;
 }
+@media(max-width:6in){a.box{padding-top:0.2em;}} 
 a.box > span.menuitem_title {
 	font-weight: bold;
 	display: block;
 }
 a.box > span.menuitem_subtitle {
-	text-decoration: none;
+	display: inline-block;
+	text-decoration: none !important;
+	top: 2em;
 	color: black;
+}
+a.box > span.menuitem_icon {
+	display: block;
+	position: relative;
+	top: calc(100vh / 20);
 }
 a.box.c2:before { /* these, to be offset from center a bit, depend on the font size, which depends on r... */
 	margin-left: 15vw;
@@ -60,7 +72,7 @@ a.box.r3:before {
 	background-color: white !important;
 }
 .empty {
-	background-color: lightgrey;
+	background-color: black;
 }
 .c2 {
 	width: 50%;
@@ -95,18 +107,21 @@ a.box.r3:before {
 }
 #footer > #navbar > a:nth-of-type(n+2):before {
 	content: ' > ';
-	text-decoration: none;
+	display: inline-block;
+	text-decoration: none !important;
 	color: black;
 }
 #footer > #navbar > a:hover {
 	background-color:white;
 }
+/*
 #notifications:after {
 	content: '(' counter(notifications) ')';
 }
 #notifications.nonzero:after {
 	background-color: yellow;
 }
+*/
 .overlay {
 	position: absolute;
 	top: 0px;
@@ -116,6 +131,7 @@ a.box.r3:before {
 	height: calc(100% - 30px);
 	z-index: -2;
 }
+/*
 #notifications-overlay > ul > li:before {
 	counter-increment: notifications;
 	content: counter(notifications, none);
@@ -123,3 +139,5 @@ a.box.r3:before {
 #notifications-overlay > ul:empty:after {
 	content: 'No notifications, currently.';
 }
+*/
+@media(max-width:6in){#footer > div#about, #footer > div#operator > span#keyboard{display:none;}} 
